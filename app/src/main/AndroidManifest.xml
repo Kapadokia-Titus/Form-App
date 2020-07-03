@@ -16,6 +16,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+<!--        exported false means that the application content cannot be accessed by another application-->
+        <provider
+            android:authorities="kapadokia.nyandoro.cpdemo.data.NationPovider"
+            android:name=".data.NationPovider"
+            android:exported="false" />
     </application>
 
 </manifest>
