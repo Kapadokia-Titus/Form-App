@@ -56,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		btnDisplayAll.setOnClickListener(this);
 
 		databaseHelper = new NationDbHelper(this);
+
+		// getWritableDatabase() method is responsible for creation of the database.
+		// if the database doesn't exist it will create a new database
 		database = databaseHelper.getWritableDatabase();		// READ/WRITE
 	}
 
@@ -141,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 		String sortOrder = null;	// Ascending or Descending ...
 
+		// cursor helps us print out all values present in the database.
 		Cursor cursor = database.query(NationContract.NationEntry.TABLE_NAME,		// The table name
 				projection,                 // The columns to return
 				selection,                  // Selection: WHERE clause OR the condition
