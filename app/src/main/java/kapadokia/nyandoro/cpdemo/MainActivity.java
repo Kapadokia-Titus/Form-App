@@ -1,8 +1,10 @@
 package kapadokia.nyandoro.cpdemo;
 
 import android.content.ContentValues;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import kapadokia.nyandoro.cpdemo.data.NationContract;
 import kapadokia.nyandoro.cpdemo.data.NationDbHelper;
+
+import static kapadokia.nyandoro.cpdemo.data.NationContract.NationEntry.CONTENT_URI;
 
 /*
 *
@@ -98,8 +102,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		contentValues.put(NationContract.NationEntry.COLUMN_COUNTRY, countryName);
 		contentValues.put(NationContract.NationEntry.COLUMN_CONTINENT, continentName);
 
-		long rowId = database.insert(NationContract.NationEntry.TABLE_NAME, null, contentValues);
-		Log.i(TAG, "Items inserted in table with row id: " + rowId);
+
+		// use the content provider class to insert the data into the database
+		Uri uri = CONTENT_URI;
+		Uri uriRowInserted = getContentResolver().insert(uri, contentValues);
+		Log.i(TAG, "Items inserted at: "+uriRowInserted);
 	}
 
 	private void update() {
@@ -144,15 +151,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 		String sortOrder = null;	// Ascending or Descending ...
 
-		// cursor helps us print out all values present in the database.
-		Cursor cursor = database.query(NationContract.NationEntry.TABLE_NAME,		// The table name
-				projection,                 // The columns to return
-				selection,                  // Selection: WHERE clause OR the condition
-				selectionArgs,              // Selection Arguments for the WHERE clause
-				null,                       // don't group the rows
-				null,                       // don't filter by row groups
-				sortOrder);					// The sort order
-
+		Uri uri = Uri.withAppendedPath(CONTENT_URI, rowId);
+		Cursor cursor = getContentResolver().query(uri, projection,selection,selectionArgs,sortOrder);
 		if (cursor != null && cursor.moveToNext()) {
 
 			String str = "";
@@ -182,14 +182,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 		String sortOrder = null;	// Ascending or Descending ...
 
-		Cursor cursor = database.query(NationContract.NationEntry.TABLE_NAME,		// The table name
-				projection,                 // The columns to return
-				selection,                  // Selection: WHERE clause OR the condition
-				selectionArgs,              // Selection Arguments for the WHERE clause
-				null,                       // don't group the rows
-				null,                       // don't filter by row groups
-				sortOrder);					// The sort order
 
+		Uri uri = CONTENT_URI;
+		Log.i(TAG, " " + uri);
+		Cursor cursor = getContentResolver().query(uri,projection, selection, selectionArgs, sortOrder);
 		if (cursor != null) {
 
 			String str = "";
